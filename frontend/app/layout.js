@@ -1,36 +1,53 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "../components/Header";
 import { ClerkProvider } from "@clerk/nextjs";
-import { neobrutalism } from "@clerk/ui/themes";
+import { Toaster } from "sonner";
+import Header from "@/components/Header";
+import { neobrutalism } from "@clerk/themes";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Neelagiri - Recipes",
-  description: "AI powered recipe platform",
+  title: "Neelagiri - AI Recipes Platform",
+  description: "",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} `}>
-        <ClerkProvider
-          appearance={{
-            theme: neobrutalism,
-            signInUrl: "/sign-in",
-            signUpUrl: "/sign-up",
-          }}
-        >
+    <ClerkProvider
+      appearance={{
+        baseTheme: neobrutalism,
+      }}
+    >
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <link rel="icon" href="/logo.png" sizes="any" />
+        </head>
+        <body className={`${inter.className}`}>
           <Header />
           <main className="min-h-screen">{children}</main>
-          <footer className="py-8 px-4 border-t ">
-            <div className="max-w-6xl mx-auto flex justify-center items-center">
-              <p className="text-stone-500 text-sm">Made with 💗 by Neelagiri</p>
+          <Toaster richColors />
+
+          {/* Footer */}
+          <footer className="py-8 px-4 border-t">
+            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+              <div className="flex items-center gap-3">
+                <Image
+                  src="/logo.png"
+                  alt="Neelagiri Logo"
+                  width={48}
+                  height={48}
+                  className="w-14"
+                />
+              </div>
+              <p className="text-stone-500 text-sm">
+                Made with 💗 by Neelagiri
+              </p>
             </div>
           </footer>
-        </ClerkProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

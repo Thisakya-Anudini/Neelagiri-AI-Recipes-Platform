@@ -23,7 +23,7 @@ export default async function Header() {
         >
           <Image
             src="/orange-logo.png"
-            alt="Servd Logo"
+            alt="Neelagiri Logo"
             width={60}
             height={60}
             className="w-16"
