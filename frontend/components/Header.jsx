@@ -1,16 +1,15 @@
-'use client'
-
 import React from 'react'
-import { Show, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs'
+import { Show, SignInButton, SignUpButton } from '@clerk/nextjs'
 import { Button } from './ui/button'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Cookie, Refrigerator } from 'lucide-react'
 import HowToCookModal from './HowToCookModal'
 import UserDropdown from './UserDropdown'
+import { checkUser } from '@/lib/checkUser'
 
-const Header = () => {
-  const user = null // Replace with actual user authentication logic
+const Header = async () => {
+  const user = await checkUser();   // Replace with actual user authentication logic
 
   return (
     <header

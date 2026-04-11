@@ -1,6 +1,6 @@
 import React from "react";
 import { Check } from "lucide-react";
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { Show, SignInButton } from "@clerk/nextjs";
 import { CheckoutButton } from "@clerk/nextjs/experimental";
 import { Button } from "@/components/ui/button";
 import {
@@ -106,7 +106,7 @@ export default function PricingSection({ subscriptionTier = "free" }) {
           </CardContent>
 
           <CardFooter>
-            <SignedIn>
+            <Show when="signed-in">
               <CheckoutButton
                 planId="cplan_37y5uChZ9uYauQyTlDkXDh997ht"
                 planPeriod="month"
@@ -128,14 +128,14 @@ export default function PricingSection({ subscriptionTier = "free" }) {
                   {subscriptionTier === "pro" ? "Subscribed" : "Subscribe Now"}
                 </Button>
               </CheckoutButton>
-            </SignedIn>
-            <SignedOut>
+            </Show>
+            <Show when="signed-out">
               <SignInButton mode="modal">
                 <Button variant="primary" className="w-full">
                   Login to Subscribe
                 </Button>
               </SignInButton>
-            </SignedOut>
+            </Show>
           </CardFooter>
         </Card>
       </div>
