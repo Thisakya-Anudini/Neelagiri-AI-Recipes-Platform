@@ -9,9 +9,11 @@ import { auth } from "@clerk/nextjs/server";
 import { SITE_STATS, FEATURES, HOW_IT_WORKS_STEPS } from "@/lib/data";
 import PricingSection from "@/components/PricingSection";
 import Link from "next/link";
-
+// a landing page that shows the hero section, stats, features, how it works and pricing sections. 
+// It also checks if user is logged in and their subscription tier to show the correct pricing info.
 export default async function LandingPage() {
   const { has } = await auth();
+  //check if user has pro plan , then set subscriptionTier to pro else free 
   const subscriptionTier = has({ plan: "pro" }) ? "pro" : "free";
 
   return (

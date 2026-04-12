@@ -542,20 +542,20 @@ export interface ApiRecipeRecipe extends Struct.CollectionTypeSchema {
         'moroccan',
         'brazilian',
         'caribbean',
-        'middle - eastern',
+        'middle-eastern',
         'british',
         'german',
         'portuguese',
         'other',
       ]
     >;
-    description: Schema.Attribute.Blocks;
+    description: Schema.Attribute.RichText;
     imageUrl: Schema.Attribute.String;
     ingredients: Schema.Attribute.JSON & Schema.Attribute.Required;
     instructions: Schema.Attribute.JSON & Schema.Attribute.Required;
     isPublic: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<false>;
+      Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1071,7 +1071,7 @@ export interface PluginUsersPermissionsUser
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    clerkid: Schema.Attribute.String &
+    clerkId: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
@@ -1114,7 +1114,9 @@ export interface PluginUsersPermissionsUser
       'oneToMany',
       'api::saved-recipe.saved-recipe'
     >;
-    subscriptionTier: Schema.Attribute.Enumeration<['free', 'pro']>;
+    subscriptionTier: Schema.Attribute.Enumeration<['free', 'pro']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'free'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

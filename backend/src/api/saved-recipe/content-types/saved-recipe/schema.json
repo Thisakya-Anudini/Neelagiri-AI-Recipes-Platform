@@ -11,9 +11,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "savedAt": {
-      "type": "datetime"
-    },
     "user": {
       "type": "relation",
       "relation": "manyToOne",
@@ -25,6 +22,9 @@
       "relation": "manyToOne",
       "target": "api::recipe.recipe",
       "inversedBy": "saved_recipes"
+    },
+    "savedAt": {
+      "type": "datetime"
     }
   }
 }

@@ -10,7 +10,7 @@ import {
   getAreas,
 } from "@/actions/mealdb.actions";
 import { getCategoryEmoji, getCountryFlag } from "@/lib/data";
-
+//fetch  recipies categories before  rendering the page and show them in the categories section. also show the recipe of the day in a hero section at the top of the page.
 export default async function DashboardPage() {
   // Fetch data server-side
   const recipeData = await getRecipeOfTheDay();
@@ -27,11 +27,10 @@ export default async function DashboardPage() {
         {/* Header */}
         <div className="mb-5">
           <h1 className="text-5xl md:text-7xl font-bold text-stone-900 mb-4 tracking-tight leading-tight">
-            Fresh Recipes, Neelagiri Daily 🔥
+            Cook Something New Every Day with Neelagiri 🥗
           </h1>
           <p className="text-xl text-stone-600 font-light max-w-2xl">
-            Discover thousands of recipes from around the world. Cook, create,
-            and savor.
+            Discover global recipes. Cook, experiment, and enjoy every bite.
           </p>
         </div>
 

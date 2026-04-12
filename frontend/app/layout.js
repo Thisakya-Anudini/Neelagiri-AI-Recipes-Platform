@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
                 />
               </div>
               <p className="text-stone-500 text-sm">
-                Made with 💗 by Neelagiri
+                Made with 💗 by Neelagiri Hotel & Bakery
               </p>
             </div>
           </footer>
