@@ -2,6 +2,10 @@
 const nextConfig = {
   experimental: {
     serverComponentsHmrCache: false, // defaults to true
+    cpus: 1,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
   },
   images: {
     remotePatterns: [

@@ -9,8 +9,7 @@ import { auth } from "@clerk/nextjs/server";
 import { SITE_STATS, FEATURES, HOW_IT_WORKS_STEPS } from "@/lib/data";
 import PricingSection from "@/components/PricingSection";
 import Link from "next/link";
-// a landing page that shows the hero section, stats, features, how it works and pricing sections. 
-// It also checks if user is logged in and their subscription tier to show the correct pricing info.
+
 export default async function LandingPage() {
   const { has } = await auth();
   //check if user has pro plan , then set subscriptionTier to pro else free 
@@ -29,21 +28,20 @@ export default async function LandingPage() {
                 className="border-2 border-orange-600 text-orange-700 bg-orange-50 text-sm font-bold mb-6 uppercase tracking-wide"
               >
                 <Flame className="mr-1" />
-                #1 AI Cooking Assistant
+                AI-Powered Cooking Assistant
               </Badge>
 
               <h1 className="text-6xl md:text-8xl font-bold mb-6 leading-[0.9] tracking-tight">
-                Turn your{" "}
-                <span className="italic underline decoration-4 decoration-orange-600">
-                  leftovers
+                Make something{" "}
+                <span className="text-orange-600 font-semibold">
+                  delicious
                 </span>{" "}
-                into <br />
-                masterpieces.
+                from what you have
               </h1>
 
               <p className="text-xl md:text-2xl text-stone-600 mb-10 max-w-lg mx-auto md:mx-0 font-light">
-                Snap a photo of your fridge. We&apos;ll tell you what to cook.
-                Save money, reduce waste, and eat better tonight.
+                Snap your ingredients and get instant recipe suggestions.<br/>
+                Cook smarter, waste less and save more.
               </p>
 
               <Link href="/dashboard">
@@ -63,12 +61,13 @@ export default async function LandingPage() {
             </div>
 
             {/* Hero Image */}
-            <Card className="relative aspect-square md:aspect-4/5 border-4 border-stone-900 bg-stone-200 overflow-hidden py-0">
+            <Card className="relative w-full max-w-[460px] aspect-square md:aspect-4/5 border-4 border-stone-900 bg-stone-200 overflow-hidden py-0 mx-auto">
               <Image
-                src="/pasta-dish.png"
-                alt="Delicious pasta dish"
+                src="/ramyeon-dish.png" 
+                alt="Delicious ramyeon dish"
                 width={500}
                 height={500}
+                sizes="(min-width: 768px) 520px, 100vw"
                 className="w-full h-full object-cover"
               />
 
@@ -78,7 +77,7 @@ export default async function LandingPage() {
                   <div className="flex justify-between items-start mb-2">
                     <div>
                       <h3 className="font-bold text-lg">
-                        Rustic Tomato Basil Pasta
+                        Korean Spicy Ramyeon
                       </h3>
                       <div className="flex gap-0.5 mt-1">
                         {[...Array(5)].map((_, i) => (

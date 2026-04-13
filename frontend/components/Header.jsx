@@ -15,7 +15,7 @@ export default async function Header() {
 
   return (
     <header className="fixed top-0 w-full border-b border-stone-200 bg-stone-50/80 backdrop-blur-md z-50 supports-backdrop-filter:bg-stone-50/60">
-      <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <nav className="container mx-auto px-4 h-19 flex items-center justify-between">
         {/* Logo */}
         <Link
           href={user ? "/dashboard" : "/"}
@@ -24,8 +24,8 @@ export default async function Header() {
           <Image
             src="/orange-logo.png"
             alt="Neelagiri Logo"
-            width={60}
-            height={60}
+            width={40}
+            height={40}
             className="w-16"
           />
         </Link>
