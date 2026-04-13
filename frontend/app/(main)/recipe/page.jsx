@@ -133,11 +133,11 @@ function RecipeContent() {
             No recipe specified
           </h2>
           <p className="text-stone-600 mb-6 font-light">
-            Please select a recipe from the dashboard
+            Please select a recipe from Explore
           </p>
-          <Link href="/dashboard">
+          <Link href="/explore">
             <Button className="bg-orange-600 hover:bg-orange-700">
-              Go to Dashboard
+              Explore Recipes
             </Button>
           </Link>
         </div>
@@ -217,11 +217,11 @@ function RecipeContent() {
         {/* Header */}
         <div className="mb-8">
           <Link
-            href="/dashboard"
+            href="/explore"
             className="inline-flex items-center gap-2 text-stone-600 hover:text-orange-600 transition-colors mb-6 font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
+            Back to Explore
           </Link>
 
           {/* Title Section */}

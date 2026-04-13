@@ -1,4 +1,43 @@
 @import "tailwindcss";
+
+@keyframes todayLabelGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.35))
+      drop-shadow(0 0 10px rgba(239, 68, 68, 0.22));
+  }
+  50% {
+    filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.65))
+      drop-shadow(0 0 16px rgba(239, 68, 68, 0.55))
+      drop-shadow(0 0 28px rgba(239, 68, 68, 0.35));
+  }
+}
+
+.today-label {
+  animation: todayLabelGlow 1.4s ease-in-out infinite;
+}
+
+@keyframes flameFlicker {
+  0%,
+  100% {
+    transform: rotate(-3deg) scale(1);
+    filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.35));
+  }
+  40% {
+    transform: rotate(2deg) scale(1.12);
+    filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.65))
+      drop-shadow(0 0 22px rgba(239, 68, 68, 0.35));
+  }
+  70% {
+    transform: rotate(-1deg) scale(1.06);
+    filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.55));
+  }
+}
+
+.animate-flameflicker {
+  animation: flameFlicker 850ms ease-in-out infinite;
+  transform-origin: center bottom;
+}
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 

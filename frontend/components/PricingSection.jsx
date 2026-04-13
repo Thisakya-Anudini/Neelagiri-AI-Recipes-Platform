@@ -55,7 +55,7 @@ export default function PricingSection({ subscriptionTier = "free" }) {
           </CardContent>
 
           <CardFooter className={"mt-auto"}>
-            <Link href="/dashboard" className="w-full">
+            <Link href="/explore" className="w-full">
               <Button
                 variant="outline"
                 className="w-full border-2 border-stone-900 hover:bg-stone-900 hover:text-white"
@@ -110,7 +110,7 @@ export default function PricingSection({ subscriptionTier = "free" }) {
               <CheckoutButton
                 planId="cplan_37y5uChZ9uYauQyTlDkXDh997ht"
                 planPeriod="month"
-                newSubscriptionRedirectUrl="/dashboard"
+                newSubscriptionRedirectUrl="/explore"
                 checkoutProps={{
                   appearance: {
                     elements: {

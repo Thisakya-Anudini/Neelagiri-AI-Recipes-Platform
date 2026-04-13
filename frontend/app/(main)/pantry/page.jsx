@@ -1,28 +1,29 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import {
-  Plus,
-  Trash2,
-  Edit2,
   Check,
-  X,
   ChefHat,
+  Edit2,
   Loader2,
   Package,
+  Plus,
   Sparkles,
+  Trash2,
+  X,
 } from "lucide-react";
-import Link from "next/link";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import useFetch from "@/hooks/use-fetch";
 import {
-  getPantryItems,
   deletePantryItem,
+  getPantryItems,
   updatePantryItem,
 } from "@/actions/pantry.actions";
-import { toast } from "sonner";
 import AddToPantryModal from "@/components/AddToPantryModal";
 import PricingModal from "@/components/PricingModal";
 
@@ -31,41 +32,34 @@ export default function PantryPage() {
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({ name: "", quantity: "" });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterText, setFilterText] = useState("");
 
-  // Fetch pantry items
   const {
     loading: loadingItems,
     data: itemsData,
     fn: fetchItems,
   } = useFetch(getPantryItems);
 
-  // Delete item
   const {
     loading: deleting,
     data: deleteData,
     fn: deleteItem,
   } = useFetch(deletePantryItem);
 
-  // Update item
   const {
     loading: updating,
     data: updateData,
     fn: updateItem,
   } = useFetch(updatePantryItem);
 
-  // Load items on mount
   useEffect(() => {
     fetchItems();
   }, []);
 
-  // Update items when data arrives
   useEffect(() => {
-    if (itemsData?.success) {
-      setItems(itemsData.items);
-    }
+    if (itemsData?.success) setItems(itemsData.items);
   }, [itemsData]);
 
-  // Refresh after delete
   useEffect(() => {
     if (deleteData?.success && !deleting) {
       toast.success("Item removed from pantry");
@@ -73,7 +67,6 @@ export default function PantryPage() {
     }
   }, [deleteData]);
 
-  // Refresh after update
   useEffect(() => {
     if (updateData?.success) {
       toast.success("Item updated successfully");
@@ -82,23 +75,17 @@ export default function PantryPage() {
     }
   }, [updateData]);
 
-  // Handle delete
   const handleDelete = async (itemId) => {
     const formData = new FormData();
     formData.append("itemId", itemId);
     await deleteItem(formData);
   };
 
-  // Start editing
   const startEdit = (item) => {
     setEditingId(item.documentId);
-    setEditValues({
-      name: item.name,
-      quantity: item.quantity,
-    });
+    setEditValues({ name: item.name, quantity: item.quantity });
   };
 
-  // Save edit
   const saveEdit = async () => {
     const formData = new FormData();
     formData.append("itemId", editingId);
@@ -107,139 +94,162 @@ export default function PantryPage() {
     await updateItem(formData);
   };
 
-  // Cancel edit
   const cancelEdit = () => {
     setEditingId(null);
     setEditValues({ name: "", quantity: "" });
   };
 
-  // Handle modal success (refresh items)
   const handleModalSuccess = () => {
     fetchItems();
   };
 
+  const filteredItems = useMemo(() => {
+    const query = filterText.trim().toLowerCase();
+    if (!query) return items;
+    return items.filter((item) =>
+      String(item?.name ?? "").toLowerCase().includes(query),
+    );
+  }, [items, filterText]);
+
   return (
     <div className="min-h-screen bg-stone-50 pt-24 pb-16 px-4">
-      <div className="container mx-auto max-w-5xl">
-        {/* Header */}
-        <div className="mb-4">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <Package className="w-16 h-16 text-orange-600" />
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+            <div className="flex items-start gap-4">
+              <div className="h-14 w-14 rounded-2xl border-2 border-stone-900 bg-orange-50 flex items-center justify-center shrink-0">
+                <Package className="w-7 h-7 text-orange-700" />
+              </div>
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-stone-900 tracking-tight">
+                <h1 className="text-4xl md:text-6xl font-bold text-stone-900 tracking-tight leading-tight">
                   My Pantry
                 </h1>
-                <p className="text-stone-600 font-light">
-                  Manage your ingredients and discover what you can cook
+                <p className="text-stone-600 font-light text-base md:text-lg mt-1">
+                  Keep ingredients organized and generate recipes from what you
+                  already have.
                 </p>
               </div>
             </div>
 
-            {/* Add to Pantry Button - Desktop */}
-            <Button
-              onClick={() => setIsModalOpen(true)}
-              className="hidden md:flex bg-orange-600 hover:bg-orange-700 text-white gap-2"
-              size="lg"
-            >
-              <Plus className="w-5 h-5" />
-              Add to Pantry
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-end">
+
+              <Button
+                onClick={() => setIsModalOpen(true)}
+                className="bg-orange-600 hover:bg-orange-700 text-white gap-2"
+                size="lg"
+              >
+                <Plus className="w-5 h-5" />
+                Add Ingredient
+              </Button>
+            </div>
           </div>
 
-          {/* Add to Pantry Button - Mobile (Full Width) */}
-          <Button
-            onClick={() => setIsModalOpen(true)}
-            className="md:hidden w-full bg-orange-600 hover:bg-orange-700 text-white gap-2 mb-4"
-            size="lg"
-          >
-            <Plus className="w-5 h-5" />
-            Add to Pantry
-          </Button>
-
-          {/* Usage Stats */}
-          {itemsData?.scansLimit !== undefined && (
-            <div className="bg-white py-3 px-4 border-2 border-stone-200 inline-flex items-center gap-3">
-              <Sparkles className="w-5 h-5 text-orange-600" />
-              <div className="text-sm">
-                {itemsData.scansLimit === "unlimited" ? (
-                  <>
-                    <span className="font-bold text-green-600">∞</span>
-                    <span className="text-stone-500">
-                      {" "}
-                      Unlimited AI scans (Pro Plan)
-                    </span>
-                  </>
-                ) : (
-                  <PricingModal>
-                    <span className="text-stone-500 cursor-pointer">
-                      Upgrade to Pro for unlimited Pantry scans
-                    </span>
-                  </PricingModal>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Quick Action Card - Find Recipes */}
-        {items.length > 0 && (
-          <Link href="/pantry/recipes" className="block mb-8">
-            <div className="bg-linear-to-br from-green-600 to-emerald-500 text-white p-6 border-2 border-emerald-700 hover:shadow-xl hover:-translate-y-1 transition-all cursor-pointer group">
-              <div className="flex items-center gap-4">
-                <div className="bg-white/20 p-3 border-2 border-white/30 group-hover:bg-white/30 transition-colors">
-                  <ChefHat className="w-8 h-8" />
+          {itemsData?.scansLimit !== undefined ? (
+            <div className="mt-5 bg-white border-2 border-stone-200 p-4 shadow-xs rounded-2xl">
+              <div className="flex items-start gap-3">
+                <div className="h-10 w-10 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-5 h-5 text-orange-700" />
                 </div>
                 <div className="flex-1">
+                  <div className="text-sm font-semibold text-stone-900">
+                    AI Pantry Scans
+                  </div>
+                  {itemsData.scansLimit === "unlimited" ? (
+                    <div className="mt-1 text-sm text-stone-600">
+                      <span className="font-bold text-emerald-700">∞</span>{" "}
+                      Unlimited scans available (Pro Plan)
+                    </div>
+                  ) : (
+                    <div className="mt-1 text-sm text-stone-600">
+                      Limited scans on Free plan.{" "}
+                      <PricingModal>
+                        <span className="font-semibold text-orange-700 cursor-pointer hover:underline">
+                          Upgrade to Pro
+                        </span>
+                      </PricingModal>{" "}
+                      for unlimited scans.
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+
+        
+        {items.length > 0 ? (
+          <Link href="/pantry/recipes" className="block mb-8">
+            <div className="bg-linear-to-br from-emerald-600 to-green-500 text-white p-6 border-2 border-emerald-700 hover:shadow-xl hover:-translate-y-0.5 transition-all cursor-pointer group rounded-2xl">
+              <div className="flex items-center gap-4">
+                <div className="bg-white/15 p-3 rounded-xl border border-white/25 group-hover:bg-white/20 transition-colors">
+                  <ChefHat className="w-8 h-8" />
+                </div>
+                <div className="flex-1 min-w-0">
                   <h3 className="font-bold text-xl mb-1">
-                    What Can I Cook Today?
+                    Get recipes from your pantry
                   </h3>
-                  <p className="text-green-100 text-sm font-light">
-                    Get AI-powered recipe suggestions from your {items.length}{" "}
-                    ingredients
+                  <p className="text-emerald-50/90 text-sm font-light">
+                    AI suggestions using your {items.length} ingredients
                   </p>
                 </div>
                 <div className="hidden sm:block">
-                  <Badge className="bg-white/20 text-white border-2 border-white/30 font-bold uppercase tracking-wide">
+                  <Badge className="bg-white/15 text-white border border-white/25 font-semibold tracking-wide">
                     {items.length} items
                   </Badge>
                 </div>
               </div>
             </div>
           </Link>
-        )}
+        ) : null}
 
-        {/* Loading State */}
-        {loadingItems && (
+
+
+
+
+
+        {loadingItems ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="w-12 h-12 text-orange-600 animate-spin mb-4" />
             <p className="text-stone-500">Loading your pantry...</p>
           </div>
-        )}
+        ) : null}
 
-        {/* Pantry Items Grid */}
-        {!loadingItems && items.length > 0 && (
+        {!loadingItems && items.length > 0 ? (
           <div>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-stone-900">
-                Your Ingredients
-              </h2>
-              <Badge
-                variant="outline"
-                className="text-stone-600 border-2 border-stone-900 font-bold uppercase tracking-wide"
-              >
-                {items.length} {items.length === 1 ? "item" : "items"}
-              </Badge>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-stone-900">
+                  Your Ingredients
+                </h2>
+                <p className="text-stone-600 font-light">
+                  Search, edit, or remove items anytime.
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-end">
+                <input
+                  value={filterText}
+                  onChange={(e) => setFilterText(e.target.value)}
+                  placeholder="Search ingredients..."
+                  className="h-10 w-full sm:w-[280px] px-3 border-2 border-stone-200 bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                />
+                <Badge
+                  variant="outline"
+                  className="text-stone-700 border-2 border-stone-900 font-bold uppercase tracking-wide justify-center"
+                >
+                  {filteredItems.length}{" "}
+                  {filteredItems.length === 1 ? "item" : "items"}
+                </Badge>
+              </div>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {items.map((item) => (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredItems.map((item) => (
                 <div
                   key={item.documentId}
-                  className="bg-white p-5 border-2 border-stone-200 hover:border-orange-600 hover:shadow-lg transition-all"
+                  className="bg-white p-5 border-2 border-stone-200 hover:border-orange-600 hover:shadow-lg transition-all rounded-2xl"
                 >
                   {editingId === item.documentId ? (
-                    // Edit Mode
                     <div className="space-y-3">
                       <input
                         type="text"
@@ -267,7 +277,7 @@ export default function PantryPage() {
                           size="sm"
                           onClick={saveEdit}
                           disabled={updating}
-                          className="flex-1 bg-green-600 hover:bg-green-700 border-2 border-green-700"
+                          className="flex-1 bg-emerald-600 hover:bg-emerald-700 border-2 border-emerald-700"
                         >
                           {updating ? (
                             <Loader2 className="w-4 h-4 animate-spin" />
@@ -287,28 +297,29 @@ export default function PantryPage() {
                       </div>
                     </div>
                   ) : (
-                    // View Mode
                     <div>
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <h3 className="font-bold text-lg text-stone-900 mb-1">
+                      <div className="flex items-start justify-between mb-3 gap-3">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-lg text-stone-900 mb-1 truncate">
                             {item.name}
                           </h3>
-                          <p className="text-stone-500 text-sm font-light">
+                          <p className="text-stone-500 text-sm font-light truncate">
                             {item.quantity}
                           </p>
                         </div>
-                        <div className="flex gap-1">
+                        <div className="flex gap-1 shrink-0">
                           <button
                             onClick={() => startEdit(item)}
-                            className="p-2 border-2 border-transparent hover:border-orange-600 hover:bg-orange-50 transition-all text-stone-600 hover:text-orange-600"
+                            className="p-2 rounded-lg border border-transparent hover:border-orange-600 hover:bg-orange-50 transition-all text-stone-600 hover:text-orange-600"
+                            aria-label="Edit item"
                           >
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(item.documentId)}
                             disabled={deleting}
-                            className="p-2 border-2 border-transparent hover:border-red-600 hover:bg-red-50 transition-all text-stone-600 hover:text-red-600"
+                            className="p-2 rounded-lg border border-transparent hover:border-red-600 hover:bg-red-50 transition-all text-stone-600 hover:text-red-600 disabled:opacity-50"
+                            aria-label="Delete item"
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -324,13 +335,18 @@ export default function PantryPage() {
               ))}
             </div>
           </div>
-        )}
+        ) : null}
 
-        {/* Empty State */}
-        {!loadingItems && items.length === 0 && (
-          <div className="bg-white p-12 text-center border-2 border-dashed border-stone-200">
-            <div className="bg-orange-50 w-20 h-20 border-2 border-orange-200 flex items-center justify-center mx-auto mb-6">
-              <Package className="w-10 h-10 text-orange-600" />
+
+
+
+
+        
+
+        {!loadingItems && items.length === 0 ? (
+          <div className="bg-white rounded-3xl p-12 text-center border-2 border-dashed border-stone-200 shadow-xs">
+            <div className="bg-orange-50 w-20 h-20 rounded-2xl border-2 border-stone-900 flex items-center justify-center mx-auto mb-6">
+              <Package className="w-10 h-10 text-orange-700" />
             </div>
             <h3 className="text-2xl font-bold text-stone-900 mb-2">
               Your Pantry is Empty
@@ -348,10 +364,9 @@ export default function PantryPage() {
               Add Your First Item
             </Button>
           </div>
-        )}
+        ) : null}
       </div>
 
-      {/* Add to Pantry Modal */}
       <AddToPantryModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -360,3 +375,4 @@ export default function PantryPage() {
     </div>
   );
 }
+

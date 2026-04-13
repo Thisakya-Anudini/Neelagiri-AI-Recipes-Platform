@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "./ui/button";
-import { Cookie, Refrigerator, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Show, SignInButton, SignUpButton } from "@clerk/nextjs";
 import HowToCookModal from "./HowToCookModal";
@@ -9,74 +9,72 @@ import Image from "next/image";
 import { checkUser } from "@/lib/checkUser";
 import { Badge } from "./ui/badge";
 import UserDropdown from "./UserDropdown";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import HeaderNav from "./HeaderNav";
+import MobileSidebar from "./MobileSidebar";
 
 export default async function Header() {
-  const user = await checkUser();
+  const clerkUser = await currentUser();
+  const isSignedIn = Boolean(clerkUser);
+
+  let subscriptionTier = "free";
+  try {
+    const { has } = auth();
+    subscriptionTier = has?.({ plan: "pro" }) ? "pro" : "free";
+  } catch {
+    subscriptionTier = "free";
+  }
+
+  await checkUser();
 
   return (
-    <header className="fixed top-0 w-full border-b border-stone-200 bg-stone-50/80 backdrop-blur-md z-50 supports-backdrop-filter:bg-stone-50/60">
-      <nav className="container mx-auto px-4 h-19 flex items-center justify-between">
-        {/* Logo */}
-        <Link
-          href={user ? "/dashboard" : "/"}
-          className="flex items-center gap-2 group"
-        >
-          <Image
-            src="/orange-logo.png"
-            alt="Neelagiri Logo"
-            width={40}
-            height={40}
-            className="w-16"
-          />
-        </Link>
-
-        {/* Navigation Links */}
-        <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-stone-600">
+    <header className="fixed top-0 w-full border-b border-stone-200 bg-white/80 backdrop-blur-md z-50 supports-backdrop-filter:bg-white/60">
+      <nav className="w-full px-4 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-3">
+        {/* Logo (left) */}
+        <div className="flex items-center gap-2 justify-self-start">
+          <MobileSidebar isSignedIn={isSignedIn} />
           <Link
-            href="/recipes"
-            className="hover:text-orange-600 transition-colors flex gap-1.5 items-center"
+            href={isSignedIn ? "/explore" : "/"}
+            className="flex items-center gap-2 group"
           >
-            <Cookie className="w-4 h-4" />
-            My Recipes
-          </Link>
-          <Link
-            href="/pantry"
-            className="hover:text-orange-600 transition-colors flex gap-1.5 items-center"
-          >
-            <Refrigerator className="w-4 h-4" />
-            My Pantry
+            <Image
+              src="/orange-logo.png"
+              alt="Neelagiri Logo"
+              width={40}
+              height={40}
+              className="w-12"
+            />
           </Link>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center space-x-4">
+        {/* Middle nav */}
+        <div className="hidden md:flex items-center justify-center gap-2 min-w-0">
+          <HeaderNav isSignedIn={isSignedIn} variant="desktop" />
           <HowToCookModal />
+        </div>
 
+        {/* Right actions */}
+        <div className="flex items-center gap-3 justify-self-end">
           <Show when="signed-in">
-            {/* Pricing Modal with Built-in Trigger */}
-            {user && (
-              <PricingModal subscriptionTier={user.subscriptionTier}>
+            <PricingModal subscriptionTier={subscriptionTier}>
                 <Badge
                   variant="outline"
                   className={`flex h-8 px-3 gap-1.5 rounded-full text-xs font-semibold transition-all ${
-                    user.subscriptionTier === "pro"
+                    subscriptionTier === "pro"
                       ? "bg-linear-to-r from-orange-600 to-amber-500 text-white border-none shadow-sm"
-                      : "bg-stone-200/50 text-stone-600 border-stone-200 cursor-pointer hover:bg-stone-300/50 hover:border-stone-300"
+                      : "bg-white text-emerald-700 border-emerald-500 cursor-pointer hover:bg-emerald-50"
                   }`}
                 >
                   <Sparkles
                     className={`h-3 w-3 ${
-                      user.subscriptionTier === "pro"
+                      subscriptionTier === "pro"
                         ? "text-white fill-white/20"
-                        : "text-stone-500"
+                        : "text-emerald-600"
                     }`}
                   />
-                  <span>
-                    {user.subscriptionTier === "pro" ? "Pro Chef" : "Free Plan"}
-                  </span>
-                </Badge>
-              </PricingModal>
-            )}
+                <span>{subscriptionTier === "pro" ? "Pro Plan" : "Free Plan"}</span>
+              </Badge>
+            </PricingModal>
 
             <UserDropdown />
           </Show>

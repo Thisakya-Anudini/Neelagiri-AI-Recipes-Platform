@@ -10,7 +10,7 @@ export default function RecipeGrid({
   type, // "category" or "cuisine"
   value, // actual category/cuisine name
   fetchAction, // server action to fetch meals
-  backLink = "/dashboard",
+  backLink = "/explore",
 }) {
   const { loading, data, fn: fetchMeals } = useFetch(fetchAction);
 
@@ -35,7 +35,7 @@ export default function RecipeGrid({
             className="inline-flex items-center gap-2 text-stone-600 hover:text-orange-600 transition-colors mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
+            Back to Explore
           </Link>
 
           <h1 className="text-5xl md:text-6xl font-bold text-stone-900 capitalize tracking-tight leading-tight">

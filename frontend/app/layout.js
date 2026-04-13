@@ -29,21 +29,26 @@ export default function RootLayout({ children }) {
           <main className="min-h-screen">{children}</main>
           <Toaster richColors />
 
-          {/* Footer */}
-          <footer className="py-8 px-4 border-t">
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-              <div className="flex items-center gap-3">
-                <Image
-                  src="/logo.png"
-                  alt="Neelagiri Logo"
-                  width={48}
-                  height={48}
-                  className="w-14"
-                />
+          <footer className="px-4 py-3 border-t border-stone-200 bg-linear-to-b from-white via-white to-orange-50/40">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex items-center justify-center gap-3 text-center">
+                <div className="h-12 w-12 rounded-2xl border border-stone-200 bg-white shadow-sm flex items-center justify-center shrink-0">
+                  <Image
+                    src="/logo.png"
+                    alt="Neelagiri Logo"
+                    width={44}
+                    height={44}
+                    className="w-10 h-12"
+                    priority
+                  />
+                </div>
+                <div className="text-stone-700 font-semibold text-sm leading-none whitespace-nowrap">
+                  Neelagiri Hotel & Bakery
+                </div>
+                <div className="text-stone-600 text-xs whitespace-nowrap">
+                  © 2026. All Rights Reserved.
+                </div>
               </div>
-              <p className="text-stone-500 text-sm">
-                Made with 💗 by Neelagiri Hotel & Bakery
-              </p>
             </div>
           </footer>
         </body>

@@ -4,6 +4,7 @@ const isProtectedRoute = createRouteMatcher([
   "/recipe(.*)",
   "/recipes(.*)",
   "/dashboard(.*)",
+  "/explore(.*)",
   "/pantry(.*)",
 ]);
 
