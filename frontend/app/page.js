@@ -10,6 +10,7 @@ import {
   DollarSign,
   ScanLine,
   UtensilsCrossed,
+  Check,
 } from "lucide-react";
 import Image from "next/image";
 import { SignUpButton } from "@clerk/nextjs";
@@ -23,99 +24,135 @@ export default async function LandingPage() {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900">
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4">
+      <section className="pt-20 md:pt-24 pb-20 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-20">
-            {/* Text Content */}
-            <div className="flex-1 text-center md:text-left">
-              <Badge
-                variant="outline"
-                className="border-2 border-orange-600 text-orange-700 bg-orange-50 text-sm font-bold mb-6 uppercase tracking-wide"
-              >
-                <Flame className="mr-1" />
-                AI-Powered Cooking Assistant
-              </Badge>
+          {/* Top Title (centered on desktop) */}
+          <div className="mx-auto text-center max-w-6xl">
+            <Badge
+              variant="outline"
+              className="border-2 border-orange-600 text-orange-700 bg-orange-50 text-sm font-bold mb-6 uppercase tracking-wide"
+            >
+              <Flame className="mr-1" />
+              AI-Powered Cooking Assistant
+            </Badge>
 
-              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-[0.95] tracking-tight">
-                Make something{" "}
-                <span className="text-orange-600 font-semibold">
-                  delicious
-                </span>{" "}
-                from what you have
-              </h1>
+            <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-[0.95] tracking-tight mx-auto max-w-none">
+              Make Something{" "}
+              <span className="text-orange-600 font-semibold">Delicious</span>{" "}
+              From What You Have
+            </h1>
+          </div>
 
+          {/* Under-title layout */}
+          <div className="mt-10 md:mt-12 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-10 lg:gap-12 items-start">
+            {/* Supporting text + CTA */}
+            <div className="text-center md:text-left md:justify-self-end md:mt-3 w-full max-w-lg">
               <div className="mb-9 max-w-lg mx-auto md:mx-0">
-                <p className="text-lg md:text-xl text-stone-700 font-light">
-                  Snap Your Ingredients and Get Instant Recipe Suggestions.
+                <p className="text-xl md:text-2xl text-stone-600 font-light tracking-tight">
+                  <span className="inline-flex items-center gap-2">
+                    <Camera className="h-5 w-5 text-orange-600" />
+                    Snap Your Ingredients.
+                  </span>
                 </p>
-                <p className="mt-2 text-lg md:text-xl text-green-700 font-medium">
-                  Cook Smarter, Waste Less and Save More.
+                <p className="mt-2 text-base md:text-lg text-stone-600 font-light leading-relaxed">
+                  <span className="inline-flex items-center gap-2">
+                    <Sparkles className="h-5 w-5 text-orange-600" />
+                    Get Instant Recipe Suggestions You Can Cook Right Now.
+                  </span>
                 </p>
-                
+
+                <div className="mt-5 flex justify-center md:justify-start">
+                  <ul className="w-full max-w-md space-y-3 pl-4 border-l-2 border-green-200/70">
+                    <li className="flex items-center gap-3 text-base md:text-lg text-green-700 font-semibold tracking-tight">
+                      <span className="h-7 w-7 rounded-full bg-green-100 border border-green-500 flex items-center justify-center shrink-0 shadow-sm">
+                        <Check className="h-4 w-4 text-green-800 motion-safe:animate-pulse" />
+                      </span>
+                      <span>Cook Smarter</span>
+                    </li>
+                    <li className="flex items-center gap-3 text-base md:text-lg text-green-700 font-semibold tracking-tight">
+                      <span className="h-7 w-7 rounded-full bg-green-100 border border-green-500 flex items-center justify-center shrink-0 shadow-sm">
+                        <Check className="h-4 w-4 text-green-800 motion-safe:animate-pulse" />
+                      </span>
+                      <span>Waste Less</span>
+                    </li>
+                    <li className="flex items-center gap-3 text-base md:text-lg text-green-700 font-semibold tracking-tight">
+                      <span className="h-7 w-7 rounded-full bg-green-100 border border-green-500 flex items-center justify-center shrink-0 shadow-sm">
+                        <Check className="h-4 w-4 text-green-800 motion-safe:animate-pulse" />
+                      </span>
+                      <span>Save More</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
 
               <Link href="/explore">
                 <Button
                   size="xl"
                   variant="primary"
-                  className="px-8 py-7 text-lg mt-5"
+                  className="px-8 py-7 text-lg mt-0.5"
                 >
                   Start Cooking Free <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
 
-              <p className="mt-6 text-sm text-stone-500">
+              <p className="mt-5 text-sm text-stone-500">
                 <span className="font-bold text-stone-900">10k+ Cooks</span>{" "}
                 Joined Last Month
               </p>
             </div>
 
-            {/* Hero Image */}
-            <Card className="relative w-full max-w-[450px] aspect-square md:aspect-4/5 border-4 border-stone-900 bg-stone-200 overflow-hidden py-0 mx-auto">
-              <Image
-                src="/ramyeon-dish.png" 
-                alt="Delicious ramyeon dish"
-                width={500}
-                height={500}
-                sizes="(min-width: 768px) 520px, 100vw"
-                className="w-full h-full object-cover"
-              />
+            {/* Hero Images */}
+            <div className="w-full md:justify-self-start">
+              <div className="mx-auto md:mx-0 w-full max-w-[340px] md:max-w-[420px] lg:max-w-[460px] space-y-6">
+                {/* Dish */}
+                <Card className="relative w-full aspect-[4/5] md:aspect-[16/12] border-1 border-stone-500 bg-stone-200 overflow-hidden py-0 rounded-2xl">
+                  <Image
+                    src="/ramyeon-dish.png"
+                    alt="Delicious ramyeon dish"
+                    width={400}
+                    height={500}
+                    sizes="(min-width: 768px) 520px, 100vw"
+                    className="w-full h-full object-cover"
+                  />
 
-              {/* Floating Card */}
-              <Card className="absolute bottom-8 left-8 right-8 bg-white/95 backdrop-blur-sm border-2 border-stone-900 py-0">
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <div>
-                      <h3 className="font-bold text-lg">
-                        Korean Spicy Ramyeon
-                      </h3>
-                      <div className="flex gap-0.5 mt-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className="w-3 h-3 fill-orange-500 text-orange-500"
-                          />
-                        ))}
+                  {/* Floating Card */}
+                  <Card className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-4rem)] md:w-[calc(100%-7rem)] max-w-xs bg-white/95 backdrop-blur-sm border-1 border-stone-900 py-0">
+                    <CardContent className="p-3">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h3 className="font-bold text-base leading-tight">
+                            Korean Spicy Ramyeon
+                          </h3>
+                          <div className="flex gap-0.5 mt-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className="w-3 h-3 fill-orange-500 text-orange-500"
+                              />
+                            ))}
+                          </div>
+                        </div>
+                        <Badge
+                          variant="outline"
+                          className="border-2 border-green-700 bg-green-50 text-green-700 font-bold"
+                        >
+                          98% MATCH
+                        </Badge>
                       </div>
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className="border-2 border-green-700 bg-green-50 text-green-700 font-bold"
-                    >
-                      98% MATCH
-                    </Badge>
-                  </div>
-                  <div className="flex gap-4 text-xs text-stone-500 font-medium">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" /> 25 mins
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Users className="w-3 h-3" /> 2 servings
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </Card>
+                      <div className="flex gap-4 text-[11px] text-stone-500 font-medium">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> 25 mins
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Users className="w-3 h-3" /> 2 servings
+                        </span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Card>
+
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -155,12 +192,12 @@ export default async function LandingPage() {
       {/* Features */}
       <section className="py-24 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-16">
+          <div className="mb-12 text-center md:text-left">
             <h2 className="text-5xl md:text-6xl font-bold mb-4">
               Your Smart Kitchen
             </h2>
             <p className="text-stone-600 text-xl font-light">
-              Everything you need to master your meal prep.
+              Everything You Nneed to Master Your Meal Prep.
             </p>
           </div>
 
@@ -208,8 +245,8 @@ export default async function LandingPage() {
 
       {/* How It Works */}
       <section className="py-16 md:py-20 px-4 border-y-2 border-stone-200 bg-stone-900 text-stone-50">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-10 md:mb-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-12 text-center md:text-left">
             <h2 className="text-5xl md:text-6xl font-bold mb-4">Cook in 3 Steps</h2>
             <p className="text-stone-400 text-lg font-light max-w-2xl">
               A fast path from ingredients to a meal. Clear, simple, repeatable.

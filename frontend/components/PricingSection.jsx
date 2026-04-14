@@ -5,8 +5,6 @@ import { CheckoutButton } from "@clerk/nextjs/experimental";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -17,95 +15,112 @@ import Link from "next/link";
 export default function PricingSection({ subscriptionTier = "free" }) {
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="mb-16">
-        <h2 className="text-5xl md:text-6xl font-bold mb-4">Simple Pricing</h2>
-        <p className="text-xl text-stone-600 font-light">
-          Start for free. Upgrade to become a master chef.
-        </p>
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-        {/* Free Plan */}
-        <Card className="border-2 border-stone-200 bg-white">
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold">Sous Chef</CardTitle>
-            <div className="text-5xl font-bold text-stone-900">
-              $0
-              <span className="text-lg font-normal text-stone-400">/mo</span>
+      <div className="grid gap-5 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
+        <Card className="h-full min-h-[430px] border border-stone-200 bg-white shadow-xs rounded-2xl overflow-hidden flex flex-col py-0 gap-0">
+          <div className="h-1.5 bg-emerald-600" />
+          <CardHeader className="pb-3 pt-4">
+            <CardTitle className="text-base md:text-lg font-bold text-stone-900">
+              Free
+            </CardTitle>
+            <div className="mt-2 flex items-end gap-2">
+              <div className="text-3xl md:text-4xl font-bold text-stone-900">
+                $0
+              </div>
+              <div className="text-s font-medium text-stone-500 pb-1">
+                /month
+              </div>
             </div>
-            <CardDescription className="text-stone-600 font-light text-base">
-              Perfect for casual weekly cooks.
-            </CardDescription>
+            <div className="mt-1 text-xs md:text-sm text-stone-600 font-light">
+              For casual cooking and getting started.
+            </div>
           </CardHeader>
 
-          <CardContent>
-            <ul className="space-y-4">
-              {[
-                "10 pantry scans per month",
-                "5 AI meal recommendations",
-                "Standard support",
-                "Standard Recipes",
-              ].map((item, i) => (
-                <li key={i} className="flex gap-3 text-stone-700">
-                  <Check className="h-5 w-5 shrink-0 mt-0.5 text-stone-400" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
+          <div className="px-5 pb-4 flex-1">
+            <div className="rounded-xl border border-stone-200 bg-stone-50 p-3">
+              <div className="text-[11px] font-semibold text-stone-900 mb-2">
+                What&apos;s included
+              </div>
+              <ul className="space-y-1.5">
+                {[
+                  "10 pantry scans per month",
+                  "5 AI meal recommendations",
+                  "Standard recipe access",
+                  "Standard support",
+                ].map((item) => (
+                  <li key={item} className="flex gap-3 text-stone-700">
+                    <span className="mt-0.5 inline-flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-600">
+                      <Check className="h-3.5 w-3.5 text-white" />
+                    </span>
+                    <span className="text-xs md:text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-          <CardFooter className={"mt-auto"}>
+          <CardFooter className="px-5 pb-4 pt-0">
             <Link href="/explore" className="w-full">
               <Button
-                variant="outline"
-                className="w-full border-2 border-stone-900 hover:bg-stone-900 hover:text-white"
+                size="lg"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
               >
-                Get Started
+                Continue with Free
               </Button>
             </Link>
           </CardFooter>
         </Card>
 
-        {/* Pro Plan */}
-        <Card className="relative border-2 border-orange-600 bg-orange-50">
-          <Badge className="absolute top-0 right-0 rounded-none rounded-bl-lg bg-orange-600 text-white font-bold uppercase tracking-wide border-none">
-            MOST POPULAR
-          </Badge>
+        <Card className="h-full min-h-[430px] border border-stone-200 bg-white shadow-xs rounded-2xl overflow-hidden flex flex-col py-0 gap-0">
+          <div className="h-1.5 bg-orange-600" />
 
-          <CardHeader>
-            <CardTitle className="text-3xl font-bold text-orange-900">
-              Head Chef
-            </CardTitle>
-            <div className="text-5xl font-bold text-orange-600">
-              $7.99
-              <span className="text-lg font-normal text-orange-400">/mo</span>
+          <CardHeader className="pb-3 pt-4">
+            <div className="flex items-start justify-between gap-4">
+              <CardTitle className="text-base md:text-lg font-bold text-stone-900">
+                Pro
+              </CardTitle>
+              <Badge className="bg-orange-600 text-white font-bold border-none">
+                Best value
+              </Badge>
             </div>
-            <CardDescription className="text-orange-800/70 font-light text-base">
-              For the serious home cook.
-            </CardDescription>
+            <div className="mt-2 flex items-end gap-2">
+              <div className="text-3xl md:text-4xl font-bold text-stone-900">
+                $7.99
+              </div>
+              <div className="text-s font-medium text-stone-500 pb-1">
+                /month
+              </div>
+            </div>
+            <div className="mt-1 text-xs md:text-sm text-stone-600 font-light">
+              For serious home cooks who want unlimited AI help.
+            </div>
           </CardHeader>
 
-          <CardContent>
-            <ul className="space-y-4">
-              {[
-                "Unlimited pantry scans",
-                "Unlimited AI recipes",
-                "Priority Support",
-                "Recipes with Nutritional analysis",
-                "Chef's Tips & Tricks",
-                "Ingredient Substitutions",
-              ].map((item, i) => (
-                <li key={i} className="flex gap-3 text-orange-950">
-                  <Badge className="bg-orange-200 p-1 rounded-full h-6 w-6 flex items-center justify-center border-none">
-                    <Check className="h-4 w-4 text-orange-700" />
-                  </Badge>
-                  <span className="font-medium">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
+          <div className="px-5 pb-4 flex-1">
+            <div className="rounded-xl border border-stone-200 bg-stone-50 p-3">
+              <div className="text-[11px] font-semibold text-stone-900 mb-2">
+                Everything in Free, plus
+              </div>
+              <ul className="space-y-1.5">
+                {[
+                  "Unlimited pantry scans",
+                  "Unlimited AI recipes",
+                  "Priority support",
+                  "Nutritional analysis",
+                  "Chef's tips & tricks",
+                  "Ingredient substitutions",
+                ].map((item) => (
+                  <li key={item} className="flex gap-3 text-stone-800">
+                    <span className="mt-0.5 inline-flex h-4.5 w-4.5 items-center justify-center rounded-full bg-orange-600">
+                      <Check className="h-3.5 w-3.5 text-white" />
+                    </span>
+                    <span className="text-xs md:text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
 
-          <CardFooter>
+          <CardFooter className="px-5 pb-4 pt-0">
             <Show when="signed-in">
               <CheckoutButton
                 planId="cplan_37y5uChZ9uYauQyTlDkXDh997ht"
@@ -123,16 +138,20 @@ export default function PricingSection({ subscriptionTier = "free" }) {
               >
                 <Button
                   disabled={subscriptionTier === "pro"}
-                  className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-orange-400 disabled:cursor-not-allowed text-white"
+                  size="lg"
+                  className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-orange-200 disabled:text-orange-950 disabled:cursor-not-allowed text-white"
                 >
-                  {subscriptionTier === "pro" ? "Subscribed" : "Subscribe Now"}
+                  {subscriptionTier === "pro" ? "You're on Pro" : "Upgrade to Pro"}
                 </Button>
               </CheckoutButton>
             </Show>
             <Show when="signed-out">
               <SignInButton mode="modal">
-                <Button variant="primary" className="w-full">
-                  Login to Subscribe
+                <Button
+                  size="lg"
+                  className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+                >
+                  Sign in to upgrade
                 </Button>
               </SignInButton>
             </Show>

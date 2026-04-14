@@ -18,14 +18,14 @@ export const FEATURES = [
   {
     title: "AI Chef Suggestions",
     description:
-      "Get personalized recipe ideas based on your ingredients—so you cook confidently and waste less.",
+      "Get personalized recipe ideas based on your ingredients-so you cook confidently and waste less.",
     icon: ChefHat,
     limit: "Free: 5 meals/mo",
   },
   {
     title: "Search Any Dish",
     description:
-      "Find the exact dish you’re craving fast. Filter by cuisine, style, and time—then start cooking.",
+      "Find the exact dish you’re craving fast. Filter by cuisine, style, and time-then start cooking.",
     icon: Search,
     limit: "Unlimited searches",
   },

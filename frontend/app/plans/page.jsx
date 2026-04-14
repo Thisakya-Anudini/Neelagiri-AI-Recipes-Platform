@@ -8,22 +8,21 @@ export default async function PlansPage() {
   const subscriptionTier = has?.({ plan: "pro" }) ? "pro" : "free";
 
   return (
-    <div className="min-h-screen bg-stone-50 pt-24 pb-16 px-4">
+    <div className="min-h-screen bg-linear-to-b from-stone-50 via-stone-50 to-orange-50/40 pt-24 pb-16 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-14">
-          <h1 className="text-5xl md:text-6xl font-bold text-stone-900 mb-3 tracking-tight leading-tight">
-            Plans
+        <header className="mb-10 md:mb-12">
+          <h1 className="text-5xl md:text-6xl font-bold text-stone-900 tracking-tight leading-[1.05]">
+            Subscription Plans
           </h1>
-          <p className="text-lg text-stone-600 font-light max-w-2xl">
+          <p className="mt-3 text-lg md:text-xl text-stone-600 font-light max-w-2xl">
             {isSignedIn
-              ? "Manage your plan or upgrade anytime."
-              : "Start free, and upgrade when you’re ready."}
+              ? "View your current plan or upgrade anytime."
+              : "Choose a plan that fits your cooking style."}
           </p>
-        </div>
+        </header>
 
         <PricingSection subscriptionTier={subscriptionTier} />
       </div>
     </div>
   );
 }
-

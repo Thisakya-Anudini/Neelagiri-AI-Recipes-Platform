@@ -269,7 +269,7 @@ export function RecipePDF({ recipe, logoSrc, mealPhotoSrc }) {
                 <View key={i} style={styles.listItem}>
                   <Text style={styles.bullet}>•</Text>
                   <Text style={styles.listText}>
-                    {ing.item} <Text style={styles.amount}>— {ing.amount}</Text>
+                    {ing.item} <Text style={styles.amount}>- {ing.amount}</Text>
                   </Text>
                 </View>
               ))}
