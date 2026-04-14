@@ -11,28 +11,28 @@ export const FEATURES = [
   {
     title: "Scan Your Pantry",
     description:
-      "Snap a photo and instantly see what ingredients you have. No typing required.",
+      "Take a quick photo and we’ll detect what you have in seconds. No typing, no lists, no hassle.",
     icon: Camera,
     limit: "Free: 10 scans/mo",
   },
   {
     title: "AI Chef Suggestions",
     description:
-      "Get recipe ideas from what you already own. Reduce waste and cook with confidence.",
+      "Get personalized recipe ideas based on your ingredients—so you cook confidently and waste less.",
     icon: ChefHat,
     limit: "Free: 5 meals/mo",
   },
   {
     title: "Search Any Dish",
     description:
-      "Explore global dishes fast. Browse by cuisine and category in a couple of clicks.",
+      "Find the exact dish you’re craving fast. Filter by cuisine, style, and time—then start cooking.",
     icon: Search,
     limit: "Unlimited searches",
   },
   {
     title: "Digital Cookbook",
     description:
-      "Save favorites to your cookbook and come back anytime. Simple and organized.",
+      "Save your best finds in one place and come back anytime. Clean, simple, and always organized.",
     icon: BookOpen,
     limit: "Free: 3 saves/mo",
   },
@@ -42,12 +42,12 @@ export const HOW_IT_WORKS_STEPS = [
   {
     step: "01",
     title: "Scan",
-    desc: "Scan your pantry or add ingredients in seconds.",
+    desc: "Scan your pantry or add ingredients in moments.",
   },
   {
     step: "02",
     title: "Select",
-    desc: "Pick a recipe suggestion that fits your time and mood.",
+    desc: "Choose a recipe that matches your time, taste, and mood.",
   },
   {
     step: "03",
