@@ -41,6 +41,23 @@ function RecipeContent() {
   const [recipe, setRecipe] = useState(null);
   const [recipeId, setRecipeId] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
+  const [pdfLogoSrc, setPdfLogoSrc] = useState(null);
+  const [pdfMealSrc, setPdfMealSrc] = useState(null);
+
+  async function tryGetDataUrl(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const blob = await res.blob();
+      return await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(String(reader.result || ""));
+        reader.readAsDataURL(blob);
+      });
+    } catch {
+      return null;
+    }
+  }
 
   // Get or generate recipe
   const {
@@ -86,6 +103,32 @@ function RecipeContent() {
       }
     }
   }, [recipeData]);
+
+  // Prepare assets for PDF (embed images when possible)
+  useEffect(() => {
+    let cancelled = false;
+
+    async function run() {
+      if (typeof window === "undefined" || !recipe) return;
+
+      const logoUrl = `${window.location.origin}/orange-logo.png`;
+      const logoDataUrl = await tryGetDataUrl(logoUrl);
+      const mealDataUrl = recipe.imageUrl
+        ? await tryGetDataUrl(recipe.imageUrl)
+        : null;
+
+      if (cancelled) return;
+
+      setPdfLogoSrc(logoDataUrl || logoUrl);
+      setPdfMealSrc(mealDataUrl || recipe.imageUrl || null);
+    }
+
+    run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [recipe]);
 
   // Handle save success
   useEffect(() => {
@@ -317,7 +360,13 @@ function RecipeContent() {
                 )}
               </Button>
               <PDFDownloadLink
-                document={<RecipePDF recipe={recipe} />}
+                document={
+                  <RecipePDF
+                    recipe={recipe}
+                    logoSrc={pdfLogoSrc || "/orange-logo.png"}
+                    mealPhotoSrc={pdfMealSrc || recipe.imageUrl}
+                  />
+                }
                 fileName={`${recipe.title
                   .replace(/\s+/g, "-")
                   .toLowerCase()}.pdf`}
