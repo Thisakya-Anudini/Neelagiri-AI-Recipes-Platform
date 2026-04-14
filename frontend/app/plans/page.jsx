@@ -5,7 +5,13 @@ import PricingSection from "@/components/PricingSection";
 export default async function PlansPage() {
   const { has, userId } = await auth();
   const isSignedIn = Boolean(userId);
-  const subscriptionTier = has?.({ plan: "pro" }) ? "pro" : "free";
+  const isPro =
+    Boolean(has?.({ plan: "pro" })) ||
+    Boolean(has?.({ plan: "Pro" })) ||
+    Boolean(has?.({ plan: "PRO" })) ||
+    Boolean(has?.({ plan: "pro-plan" })) ||
+    Boolean(has?.({ plan: "pro_plan" }));
+  const subscriptionTier = isPro ? "pro" : "free";
 
   return (
     <div className="min-h-screen bg-linear-to-b from-stone-50 via-stone-50 to-orange-50/40 pt-24 pb-16 px-4">

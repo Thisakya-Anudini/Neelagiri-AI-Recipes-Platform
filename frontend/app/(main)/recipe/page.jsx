@@ -44,6 +44,14 @@ function RecipeContent() {
   const [pdfLogoSrc, setPdfLogoSrc] = useState(null);
   const [pdfMealSrc, setPdfMealSrc] = useState(null);
 
+  function splitNutritionValue(raw) {
+    const text = String(raw ?? "").trim();
+    if (!text) return { main: "", note: "" };
+    const match = text.match(/^(.*?)(?:\s*\(([^)]+)\))\s*$/);
+    if (!match) return { main: text, note: "" };
+    return { main: (match[1] ?? "").trim(), note: (match[2] ?? "").trim() };
+  }
+
   async function tryGetDataUrl(url) {
     try {
       const res = await fetch(url);
@@ -428,7 +436,7 @@ function RecipeContent() {
               {/* Nutrition Info */}
               {recipe.nutrition && (
                 <div className="mt-6 pt-6 border-t-2 border-stone-200">
-                  <h3 className="font-bold text-stone-900 mb-3 uppercase tracking-wide text-sm flex items-center gap-2">
+                  <h3 className="font-bold text-stone-900 mb-3 uppercase tracking-wide text-[11px] flex items-center gap-2">
                     Nutrition (per serving)
                     {!recipeData.isPro && (
                       <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-semibold">
@@ -441,41 +449,97 @@ function RecipeContent() {
                     isPro={recipeData.isPro}
                     lockText="Nutrition info is Pro-only"
                   >
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="bg-orange-50 p-3 text-center border-2 border-orange-100">
-                        <div className="text-2xl font-bold text-orange-600">
-                          {recipe.nutrition.calories}
-                        </div>
-                        <div className="text-xs text-stone-500 font-bold uppercase tracking-wide">
+                    <div className="grid grid-cols-2 gap-2 md:gap-3">
+                      <div className="bg-orange-50 p-2.5 md:p-3 text-center border border-orange-200/80 rounded-lg">
+                        <div className="text-[9px] md:text-[10px] text-stone-500 font-semibold uppercase tracking-wider mb-3">
                           Calories
                         </div>
+                        {(() => {
+                          const { main, note } = splitNutritionValue(
+                            recipe.nutrition.calories,
+                          );
+                          return (
+                            <>
+                              <div className="text-[12px] md:text-sm font-semibold text-orange-700 leading-snug break-words">
+                                {main}
+                              </div>
+                              {note ? (
+                                <div className="mt-0.5 text-[9px] md:text-[10px] text-stone-500 font-medium leading-snug">
+                                  {note}
+                                </div>
+                              ) : null}
+                            </>
+                          );
+                        })()}
                       </div>
 
-                      <div className="bg-stone-50 p-3 text-center border-2 border-stone-100">
-                        <div className="text-2xl font-bold text-stone-900">
-                          {recipe.nutrition.protein}
-                        </div>
-                        <div className="text-xs text-stone-500 font-bold uppercase tracking-wide">
+                      <div className="bg-stone-50 p-2.5 md:p-3 text-center border border-stone-200/80 rounded-lg">
+                        <div className="text-[9px] md:text-[10px] text-stone-500 font-semibold uppercase tracking-wider mb-3">
                           Protein
                         </div>
+                        {(() => {
+                          const { main, note } = splitNutritionValue(
+                            recipe.nutrition.protein,
+                          );
+                          return (
+                            <>
+                              <div className="text-[12px] md:text-sm font-semibold text-stone-900 leading-snug break-words">
+                                {main}
+                              </div>
+                              {note ? (
+                                <div className="mt-0.5 text-[9px] md:text-[10px] text-stone-500 font-medium leading-snug">
+                                  {note}
+                                </div>
+                              ) : null}
+                            </>
+                          );
+                        })()}
                       </div>
 
-                      <div className="bg-stone-50 p-3 text-center border-2 border-stone-100">
-                        <div className="text-2xl font-bold text-stone-900">
-                          {recipe.nutrition.carbs}
-                        </div>
-                        <div className="text-xs text-stone-500 font-bold uppercase tracking-wide">
+                      <div className="bg-stone-50 p-2.5 md:p-3 text-center border border-stone-200/80 rounded-lg">
+                        <div className="text-[9px] md:text-[10px] text-stone-500 font-semibold uppercase tracking-wider mb-3">
                           Carbs
                         </div>
+                        {(() => {
+                          const { main, note } = splitNutritionValue(
+                            recipe.nutrition.carbs,
+                          );
+                          return (
+                            <>
+                              <div className="text-[12px] md:text-sm font-semibold text-stone-900 leading-snug break-words">
+                                {main}
+                              </div>
+                              {note ? (
+                                <div className="mt-0.5 text-[9px] md:text-[10px] text-stone-500 font-medium leading-snug">
+                                  {note}
+                                </div>
+                              ) : null}
+                            </>
+                          );
+                        })()}
                       </div>
 
-                      <div className="bg-stone-50 p-3 text-center border-2 border-stone-100">
-                        <div className="text-2xl font-bold text-stone-900">
-                          {recipe.nutrition.fat}
-                        </div>
-                        <div className="text-xs text-stone-500 font-bold uppercase tracking-wide">
+                      <div className="bg-stone-50 p-2.5 md:p-3 text-center border border-stone-200/80 rounded-lg">
+                        <div className="text-[9px] md:text-[10px] text-stone-500 font-semibold uppercase tracking-wider mb-3">
                           Fat
                         </div>
+                        {(() => {
+                          const { main, note } = splitNutritionValue(
+                            recipe.nutrition.fat,
+                          );
+                          return (
+                            <>
+                              <div className="text-[12px] md:text-sm font-semibold text-stone-900 leading-snug break-words">
+                                {main}
+                              </div>
+                              {note ? (
+                                <div className="mt-0.5 text-[9px] md:text-[10px] text-stone-500 font-medium leading-snug">
+                                  {note}
+                                </div>
+                              ) : null}
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
                   </ProLockedSection>

@@ -1,7 +1,13 @@
+"use client";
+
 import React from "react";
 import { Check } from "lucide-react";
-import { Show, SignInButton } from "@clerk/nextjs";
-import { CheckoutButton } from "@clerk/nextjs/experimental";
+import { Show, SignInButton, useAuth } from "@clerk/nextjs";
+import {
+  CheckoutButton,
+  usePlans,
+  useSubscription,
+} from "@clerk/nextjs/experimental";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,7 +18,19 @@ import {
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
-export default function PricingSection({ subscriptionTier = "free" }) {
+export default function PricingSection({ subscriptionTier }) {
+  const { isSignedIn } = useAuth();
+  const { data: subscription } = useSubscription({ enabled: Boolean(isSignedIn) });
+  const isProFromSubscription = subscription?.status === "active";
+  const effectiveTier =
+    subscriptionTier ?? (isProFromSubscription ? "pro" : "free");
+
+  const { data: plans } = usePlans({ enabled: Boolean(isSignedIn) });
+  const proPlan =
+    plans?.find((p) => (p.name ?? "").toLowerCase() === "pro") ??
+    plans?.find((p) => (p.name ?? "").toLowerCase().includes("pro"));
+  const proCheckoutEnabled = Boolean(proPlan?.id);
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="grid gap-5 md:grid-cols-2 max-w-4xl mx-auto items-stretch">
@@ -59,14 +77,24 @@ export default function PricingSection({ subscriptionTier = "free" }) {
           </div>
 
           <CardFooter className="px-5 pb-4 pt-0">
-            <Link href="/explore" className="w-full">
+            {effectiveTier === "free" ? (
               <Button
+                disabled
                 size="lg"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                className="w-full bg-emerald-100 text-emerald-900 cursor-not-allowed"
               >
-                Continue with Free
+                Current plan
               </Button>
-            </Link>
+            ) : (
+              <Link href="/explore" className="w-full">
+                <Button
+                  size="lg"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                >
+                  Continue with Free
+                </Button>
+              </Link>
+            )}
           </CardFooter>
         </Card>
 
@@ -122,28 +150,45 @@ export default function PricingSection({ subscriptionTier = "free" }) {
 
           <CardFooter className="px-5 pb-4 pt-0">
             <Show when="signed-in">
-              <CheckoutButton
-                planId="cplan_37y5uChZ9uYauQyTlDkXDh997ht"
-                planPeriod="month"
-                newSubscriptionRedirectUrl="/explore"
-                checkoutProps={{
-                  appearance: {
-                    elements: {
-                      drawerRoot: {
-                        zIndex: 2000,
+              {effectiveTier === "pro" ? (
+                <Button
+                  disabled
+                  size="lg"
+                  className="w-full bg-orange-200 text-orange-950 cursor-not-allowed"
+                >
+                  You are subscribed
+                </Button>
+              ) : proCheckoutEnabled ? (
+                <CheckoutButton
+                  planId={proPlan.id}
+                  planPeriod="month"
+                  newSubscriptionRedirectUrl="/explore"
+                  checkoutProps={{
+                    appearance: {
+                      elements: {
+                        drawerRoot: {
+                          zIndex: 2000,
+                        },
                       },
                     },
-                  },
-                }}
-              >
-                <Button
-                  disabled={subscriptionTier === "pro"}
-                  size="lg"
-                  className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-orange-200 disabled:text-orange-950 disabled:cursor-not-allowed text-white"
+                  }}
                 >
-                  {subscriptionTier === "pro" ? "You're on Pro" : "Upgrade to Pro"}
+                  <Button
+                    size="lg"
+                    className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+                  >
+                    Upgrade to Pro
+                  </Button>
+                </CheckoutButton>
+              ) : (
+                <Button
+                  disabled
+                  size="lg"
+                  className="w-full bg-orange-200 text-orange-950 cursor-not-allowed"
+                >
+                  Upgrade to Pro
                 </Button>
-              </CheckoutButton>
+              )}
             </Show>
             <Show when="signed-out">
               <SignInButton mode="modal">

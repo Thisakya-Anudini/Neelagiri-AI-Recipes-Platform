@@ -4,26 +4,17 @@ import { Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Show, SignInButton, SignUpButton } from "@clerk/nextjs";
 import HowToCookModal from "./HowToCookModal";
-import PricingModal from "./PricingModal";
 import Image from "next/image";
 import { checkUser } from "@/lib/checkUser";
-import { Badge } from "./ui/badge";
 import UserDropdown from "./UserDropdown";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server";
 import HeaderNav from "./HeaderNav";
 import MobileSidebar from "./MobileSidebar";
+import PlanIndicator from "./PlanIndicator";
 
 export default async function Header() {
   const clerkUser = await currentUser();
   const isSignedIn = Boolean(clerkUser);
-
-  let subscriptionTier = "free";
-  try {
-    const { has } = auth();
-    subscriptionTier = has?.({ plan: "pro" }) ? "pro" : "free";
-  } catch {
-    subscriptionTier = "free";
-  }
 
   await checkUser();
 
@@ -56,25 +47,7 @@ export default async function Header() {
         {/* Right actions */}
         <div className="flex items-center gap-3 justify-self-end">
           <Show when="signed-in">
-            <PricingModal subscriptionTier={subscriptionTier}>
-                <Badge
-                  variant="outline"
-                  className={`flex h-8 px-3 gap-1.5 rounded-full text-xs font-semibold transition-all ${
-                    subscriptionTier === "pro"
-                      ? "bg-linear-to-r from-orange-600 to-amber-500 text-white border-none shadow-sm"
-                      : "bg-white text-emerald-700 border-emerald-500 cursor-pointer hover:bg-emerald-50"
-                  }`}
-                >
-                  <Sparkles
-                    className={`h-3 w-3 ${
-                      subscriptionTier === "pro"
-                        ? "text-white fill-white/20"
-                        : "text-emerald-600"
-                    }`}
-                  />
-                <span>{subscriptionTier === "pro" ? "Pro Plan" : "Free Plan"}</span>
-              </Badge>
-            </PricingModal>
+            <PlanIndicator />
 
             <UserDropdown />
           </Show>
