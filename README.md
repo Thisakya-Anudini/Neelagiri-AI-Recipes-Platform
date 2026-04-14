@@ -5,18 +5,19 @@
 
 # Neelagiri — AI Recipe Platform 🍽️✨
 
-Neelagiri is a full‑stack recipe platform that combines curated discovery, AI-assisted cooking features, pantry intelligence, and a clean modern UI. It’s designed for people who want quick inspiration, better meal planning, and a smooth “from idea → ingredients → cooking” experience.
+Neelagiri is a modern recipe website designed to support everyday cooking with a clean experience for discovering recipes, planning meals, and exploring new cuisines. It combines curated content with AI-assisted features to deliver relevant recipe suggestions and a smooth end-to-end cooking flow.
 
-**Frontend:** Next.js (App Router) • **Backend:** Strapi v5 • **Database:** PostgreSQL
+With **Today’s Special**, a **Smart Pantry** that turns ingredients into recipe ideas, **step-focused recipe pages**, and **PDF exports** for saving or sharing, Neelagiri provides a fast, mobile-responsive experience built for home cooks and food enthusiasts.
 
 ---
 
 # 🧱 Tech Stack
-- **Web App:** Next.js + React
-- **UI:** Tailwind CSS + shadcn/ui (Radix UI)
-- **AI:** Gemini (Google Generative AI SDK)
+- **Frontend:** Next.js + React
 - **Backend/CMS:** Strapi v5
 - **Database:** PostgreSQL
+- **UI:** Tailwind CSS + shadcn/ui (Radix UI)
+- **AI:** Gemini (Google Generative AI SDK)
+
 
 ---
 
@@ -53,7 +54,7 @@ Neelagiri is a full‑stack recipe platform that combines curated discovery, AI-
 - Export recipes to a clean PDF format for sharing, printing, or offline use
 
 ## 📱 Mobile Responsive
-- Responsive layouts optimized for mobile, tablet, and desktop
+- Responsive layouts optimized for mobile, tablet and desktop
 
 ---
 
