@@ -12,7 +12,11 @@ export default function ProLockedSection({
   return (
     <div className="relative">
       {/* LOCKED CONTENT */}
-      <div className={!isPro ? "blur-sm pointer-events-none select-none" : ""}>
+      <div
+        className={
+          !isPro ? "blur-sm opacity-40 pointer-events-none select-none" : ""
+        }
+      >
         {children}
       </div>
 

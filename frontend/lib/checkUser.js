@@ -1,4 +1,4 @@
-import { clerkClient, currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 const STRAPI_URL =
   process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
@@ -53,11 +53,15 @@ export const checkUser = async () => {
 
   let subscriptionTier = "free";
   try {
-    const client = await clerkClient();
-    const subscription = await client.billing.getUserBillingSubscription(
-      user.id
-    );
-    subscriptionTier = subscription?.status === "active" ? "pro" : "free";
+    const { has } = await auth();
+    const isProFromEntitlements =
+      Boolean(has?.({ plan: "pro" })) ||
+      Boolean(has?.({ plan: "Pro" })) ||
+      Boolean(has?.({ plan: "PRO" })) ||
+      Boolean(has?.({ plan: "pro-plan" })) ||
+      Boolean(has?.({ plan: "pro_plan" }));
+
+    subscriptionTier = isProFromEntitlements ? "pro" : "free";
   } catch (e) {
     subscriptionTier = "free";
   }
@@ -76,7 +80,7 @@ export const checkUser = async () => {
 
       if (!res.ok) {
         const snippet = await safeReadTextSnippet(res);
-        console.error(
+        console.warn(
           `Strapi error (${res.status}) while looking up user by clerkId. ${snippet}`
         );
         return null;
@@ -150,7 +154,7 @@ export const checkUser = async () => {
 
     if (!rolesResponse.ok) {
       const snippet = await safeReadTextSnippet(rolesResponse);
-      console.error(
+      console.warn(
         `Strapi error (${rolesResponse.status}) fetching roles. ${snippet}`
       );
       return null;
