@@ -27,8 +27,10 @@ import {
 } from "@/actions/pantry.actions";
 import AddToPantryModal from "@/components/AddToPantryModal";
 import PricingModal from "@/components/PricingModal";
+import { useAuth } from "@clerk/nextjs";
 
 export default function PantryPage() {
+  const { isSignedIn } = useAuth();
   const [items, setItems] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [editValues, setEditValues] = useState({ name: "", quantity: "" });
@@ -54,8 +56,9 @@ export default function PantryPage() {
   } = useFetch(updatePantryItem);
 
   useEffect(() => {
+    if (!isSignedIn) return;
     fetchItems();
-  }, []);
+  }, [isSignedIn]);
 
   useEffect(() => {
     if (itemsData?.success) setItems(itemsData.items);

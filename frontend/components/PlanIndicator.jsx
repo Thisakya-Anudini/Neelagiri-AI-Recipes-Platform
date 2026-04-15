@@ -3,13 +3,19 @@
 import React from "react";
 import { Sparkles } from "lucide-react";
 import { Show } from "@clerk/nextjs";
-import { useSubscription } from "@clerk/nextjs/experimental";
 import { Badge } from "./ui/badge";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 
 export default function PlanIndicator() {
-  const { data: subscription } = useSubscription();
-  const isPro = subscription?.status === "active";
+  const { isSignedIn, has } = useAuth();
+  const isPro =
+    Boolean(isSignedIn) &&
+    (Boolean(has?.({ plan: "pro" })) ||
+      Boolean(has?.({ plan: "Pro" })) ||
+      Boolean(has?.({ plan: "PRO" })) ||
+      Boolean(has?.({ plan: "pro-plan" })) ||
+      Boolean(has?.({ plan: "pro_plan" })));
 
   return (
     <Show when="signed-in">

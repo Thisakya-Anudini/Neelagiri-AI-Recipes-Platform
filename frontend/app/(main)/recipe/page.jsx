@@ -32,11 +32,13 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { RecipePDF } from "@/components/RecipePDF";
 import { ClockLoader } from "react-spinners";
 import ProLockedSection from "@/components/ProLockedSection";
+import { SignInButton, useAuth } from "@clerk/nextjs";
 
 function RecipeContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const recipeName = searchParams.get("cook");
+  const { isSignedIn } = useAuth();
 
   const [recipe, setRecipe] = useState(null);
   const [recipeId, setRecipeId] = useState(null);
@@ -90,15 +92,20 @@ function RecipeContent() {
 
   // Fetch recipe on mount
   useEffect(() => {
+    if (!isSignedIn) return;
     if (recipeName && !recipe) {
       const formData = new FormData();
       formData.append("recipeName", recipeName);
       fetchRecipe(formData);
     }
-  }, [recipeName]);
+  }, [recipeName, isSignedIn]);
 
   // Update recipe when data arrives
   useEffect(() => {
+    if (recipeData?.requiresAuth) {
+      toast.error(recipeData.message || "Sign in to continue.");
+      return;
+    }
     if (recipeData?.success) {
       setRecipe(recipeData.recipe);
       setRecipeId(recipeData.recipeId);
@@ -191,6 +198,39 @@ function RecipeContent() {
               Explore Recipes
             </Button>
           </Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isSignedIn) {
+    return (
+      <div className="min-h-screen bg-stone-50 pt-24 pb-16 px-4">
+        <div className="container mx-auto max-w-3xl text-center py-20">
+          <div className="bg-orange-50 w-20 h-20 border-2 border-orange-200 flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="w-10 h-10 text-orange-600" />
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-stone-900 mb-3">
+            Sign in to generate recipes
+          </h2>
+          <p className="text-stone-600 font-light max-w-xl mx-auto mb-8">
+            You can browse today&apos;s specials, menus, and subscription plans
+            without an account. To generate recipes, please sign in.
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            <SignInButton mode="modal">
+              <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                Sign in to continue
+              </Button>
+            </SignInButton>
+            <Button
+              variant="outline"
+              className="border-stone-200"
+              onClick={() => router.push("/explore")}
+            >
+              Browse recipes
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -421,10 +461,12 @@ function RecipeContent() {
                     {items.map((ingredient, i) => (
                       <li
                         key={i}
-                        className="flex justify-between items-start gap-2 text-stone-700 py-2 border-b border-stone-100 last:border-0"
+                        className="flex items-start gap-3 text-stone-700 py-2 border-b border-stone-100 last:border-0 min-w-0"
                       >
-                        <span className="flex-1">{ingredient.item}</span>
-                        <span className="font-bold text-orange-600 text-sm whitespace-nowrap">
+                        <span className="flex-1 min-w-0 break-words">
+                          {ingredient.item}
+                        </span>
+                        <span className="shrink-0 max-w-[45%] text-right font-bold text-orange-600 text-sm break-words">
                           {ingredient.amount}
                         </span>
                       </li>

@@ -22,8 +22,9 @@ export default function PricingSection({ subscriptionTier }) {
   const { isSignedIn } = useAuth();
   const { data: subscription } = useSubscription({ enabled: Boolean(isSignedIn) });
   const isProFromSubscription = subscription?.status === "active";
-  const effectiveTier =
-    subscriptionTier ?? (isProFromSubscription ? "pro" : "free");
+  const effectiveTier = isSignedIn
+    ? subscriptionTier ?? (isProFromSubscription ? "pro" : "free")
+    : null;
 
   const { data: plans } = usePlans({ enabled: Boolean(isSignedIn) });
   const proPlan =
@@ -77,7 +78,16 @@ export default function PricingSection({ subscriptionTier }) {
           </div>
 
           <CardFooter className="px-5 pb-4 pt-0">
-            {effectiveTier === "free" ? (
+            {!isSignedIn ? (
+              <SignInButton mode="redirect">
+                <Button
+                  size="lg"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                >
+                  Continue with Free
+                </Button>
+              </SignInButton>
+            ) : effectiveTier === "free" ? (
               <Button
                 disabled
                 size="lg"
@@ -191,12 +201,12 @@ export default function PricingSection({ subscriptionTier }) {
               )}
             </Show>
             <Show when="signed-out">
-              <SignInButton mode="modal">
+              <SignInButton mode="redirect">
                 <Button
                   size="lg"
                   className="w-full bg-orange-600 hover:bg-orange-700 text-white"
                 >
-                  Sign in to upgrade
+                  Upgrade to Pro
                 </Button>
               </SignInButton>
             </Show>

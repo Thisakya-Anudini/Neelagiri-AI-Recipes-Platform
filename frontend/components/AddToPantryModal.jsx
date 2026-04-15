@@ -21,8 +21,10 @@ import {
   addPantryItemManually,
 } from "@/actions/pantry.actions";
 import { toast } from "sonner";
+import { SignInButton, useAuth } from "@clerk/nextjs";
 
 export default function AddToPantryModal({ isOpen, onClose, onSuccess }) {
+  const { isSignedIn } = useAuth();
   const [activeTab, setActiveTab] = useState("scan");
   const [selectedImage, setSelectedImage] = useState(null);
   const [scannedIngredients, setScannedIngredients] = useState([]);
@@ -65,6 +67,10 @@ export default function AddToPantryModal({ isOpen, onClose, onSuccess }) {
 
   // Update scanned ingredients when scan completes
   useEffect(() => {
+    if (scanData?.requiresAuth) {
+      toast.error(scanData.message || "Sign in to continue.");
+      return;
+    }
     if (scanData?.success && scanData?.ingredients) {
       setScannedIngredients(scanData.ingredients);
       toast.success(`Found ${scanData.ingredients.length} ingredients!`);
@@ -94,6 +100,10 @@ export default function AddToPantryModal({ isOpen, onClose, onSuccess }) {
 
   // Handle save success
   useEffect(() => {
+    if (saveData?.requiresAuth) {
+      toast.error(saveData.message || "Sign in to continue.");
+      return;
+    }
     if (saveData?.success) {
       toast.success(saveData.message);
       handleClose();
@@ -117,6 +127,10 @@ export default function AddToPantryModal({ isOpen, onClose, onSuccess }) {
 
   // Handle manual add success
   useEffect(() => {
+    if (addData?.requiresAuth) {
+      toast.error(addData.message || "Sign in to continue.");
+      return;
+    }
     if (addData?.success) {
       toast.success("Item added to pantry!");
       setManualItem({ name: "", quantity: "" });
@@ -154,8 +168,26 @@ export default function AddToPantryModal({ isOpen, onClose, onSuccess }) {
             </TabsTrigger>
           </TabsList>
 
-          {/* AI Scan Tab */}
-          <TabsContent value="scan" className="space-y-6 mt-6">
+          {!isSignedIn ? (
+            <div className="mt-6 rounded-2xl border border-stone-200 bg-stone-50 p-6 text-center">
+              <div className="text-lg font-semibold text-stone-900">
+                Sign in to add pantry items
+              </div>
+              <div className="mt-2 text-sm text-stone-600">
+                AI scans and manual adds are available after you sign in.
+              </div>
+              <div className="mt-5 flex justify-center">
+                <SignInButton mode="redirect">
+                  <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+                    Sign in to continue
+                  </Button>
+                </SignInButton>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* AI Scan Tab */}
+              <TabsContent value="scan" className="space-y-6 mt-6">
             {scannedIngredients.length === 0 ? (
               // Step 1: Upload & Scan
               <div className="space-y-4">
@@ -265,10 +297,10 @@ export default function AddToPantryModal({ isOpen, onClose, onSuccess }) {
                 </Button>
               </div>
             )}
-          </TabsContent>
+              </TabsContent>
 
-          {/* Manual Add Tab */}
-          <TabsContent value="manual" className="mt-6">
+              {/* Manual Add Tab */}
+              <TabsContent value="manual" className="mt-6">
             <form onSubmit={handleAddManual} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-stone-700 mb-2">
@@ -320,7 +352,9 @@ export default function AddToPantryModal({ isOpen, onClose, onSuccess }) {
                 )}
               </Button>
             </form>
-          </TabsContent>
+              </TabsContent>
+            </>
+          )}
         </Tabs>
       </DialogContent>
     </Dialog>

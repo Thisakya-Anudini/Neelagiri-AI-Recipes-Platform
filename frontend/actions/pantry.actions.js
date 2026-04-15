@@ -17,7 +17,11 @@ export async function scanPantryImage(formData) {
   try {
     const user = await checkUser();
     if (!user) {
-      throw new Error("User not authenticated");
+      return {
+        success: false,
+        requiresAuth: true,
+        message: "Sign in to continue.",
+      };
     }
 
     // Check if user is Pro
@@ -130,7 +134,11 @@ export async function saveToPantry(formData) {
   try {
     const user = await checkUser();
     if (!user) {
-      throw new Error("User not authenticated");
+      return {
+        success: false,
+        requiresAuth: true,
+        message: "Sign in to continue.",
+      };
     }
 
     const ingredientsJson = formData.get("ingredients");
@@ -181,7 +189,11 @@ export async function addPantryItemManually(formData) {
   try {
     const user = await checkUser();
     if (!user) {
-      throw new Error("User not authenticated");
+      return {
+        success: false,
+        requiresAuth: true,
+        message: "Sign in to continue.",
+      };
     }
 
     const name = formData.get("name");
@@ -231,7 +243,11 @@ export async function getPantryItems() {
   try {
     const user = await checkUser();
     if (!user) {
-      throw new Error("User not authenticated");
+      return {
+        success: false,
+        requiresAuth: true,
+        message: "Sign in to continue.",
+      };
     }
 
     const response = await fetch(
@@ -268,7 +284,11 @@ export async function deletePantryItem(formData) {
   try {
     const user = await checkUser();
     if (!user) {
-      throw new Error("User not authenticated");
+      return {
+        success: false,
+        requiresAuth: true,
+        message: "Sign in to continue.",
+      };
     }
 
     const itemId = formData.get("itemId");
@@ -299,7 +319,11 @@ export async function updatePantryItem(formData) {
   try {
     const user = await checkUser();
     if (!user) {
-      throw new Error("User not authenticated");
+      return {
+        success: false,
+        requiresAuth: true,
+        message: "Sign in to continue.",
+      };
     }
 
     const itemId = formData.get("itemId");

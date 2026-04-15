@@ -68,7 +68,11 @@ export async function getOrGenerateRecipe(formData) {
   try {
     const user = await checkUser();
     if (!user) {
-      throw new Error("User not authenticated");
+      return {
+        success: false,
+        requiresAuth: true,
+        message: "Sign in to continue.",
+      };
     }
 
     const recipeName = formData.get("recipeName");
@@ -333,7 +337,10 @@ Guidelines:
     };
   } catch (error) {
     console.error("❌ Error in getOrGenerateRecipe:", error);
-    throw new Error(error.message || "Failed to load recipe");
+    return {
+      success: false,
+      message: error.message || "Failed to load recipe",
+    };
   }
 }
 

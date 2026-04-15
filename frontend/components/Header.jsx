@@ -16,8 +16,14 @@ export default async function Header() {
   const clerkUser = await currentUser();
   const isSignedIn = Boolean(clerkUser);
 
-  await checkUser();
-
+  if (isSignedIn) {
+    try {
+      await checkUser();
+    } catch {
+      // checkUser already logs; never break header rendering
+    }
+  }
+  
   return (
     <header className="fixed top-0 w-full border-b border-stone-200 bg-white/80 backdrop-blur-md z-50 supports-backdrop-filter:bg-white/60">
       <nav className="w-full px-4 h-16 grid grid-cols-[auto_1fr_auto] items-center gap-3">
