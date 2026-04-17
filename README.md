@@ -11,12 +11,16 @@ With **Today’s Special**, a **Smart Pantry** that turns ingredients into recip
 
 ---
 
-# 🧱 Tech Stack
-- **Frontend:** Next.js + React
-- **Backend/CMS:** Strapi v5
-- **Database:** PostgreSQL
-- **UI:** Tailwind CSS + shadcn/ui (Radix UI)
-- **AI:** Gemini (Google Generative AI SDK)
+
+# 🛠️ Tech Stack
+- Next.js + React (frontend)
+- Strapi v5 (CMS/backend)
+- Neon (PostgreSQL database)
+- Tailwind CSS + shadcn/ui (UI system)
+- Gemini (AI pantry scanning)
+- Arcjet (Rate limiting & Bot protection )
+- TheMealDB (Recipe API) 
+- Unsplash API (Dynamic recipe images)
 
 
 ---
