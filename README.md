@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="frontend/public/logo-orange.png" alt="Neelagiri logo" width="140" />
+  <img src="frontend/public/orange-logo.png" alt="Neelagiri logo" width="140" />
 </p>
 
 
 # Neelagiri — AI Recipe Platform 🍽️✨
 
-Neelagiri is a modern recipe website designed to support everyday cooking with a clean experience for discovering recipes, planning meals, and exploring new cuisines. It combines curated content with AI-assisted features to deliver relevant recipe suggestions and a smooth end-to-end cooking flow.
+Neelagiri is a modern recipe website designed to support everyday cooking with a clean experience for discovering recipes, planning meals and exploring new cuisines. It combines curated content with AI-assisted features to deliver relevant recipe suggestions and a smooth end-to-end cooking flow.
 
-With **Today’s Special**, a **Smart Pantry** that turns ingredients into recipe ideas, **step-focused recipe pages**, and **PDF exports** for saving or sharing, Neelagiri provides a fast, mobile-responsive experience built for home cooks and food enthusiasts.
+With **Today’s Special**, a **Smart Pantry** that turns ingredients into recipe ideas, **step-focused recipe pages** and **PDF exports** for saving or sharing, Neelagiri provides a fast, mobile-responsive experience built for home cooks and food enthusiasts.
 
 ---
 
